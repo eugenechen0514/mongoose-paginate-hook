@@ -1,10 +1,3 @@
-# Mongoose paginate hook
-
-Provide hook-functions to modify output and input for paginate method
-
-# Example
-
-``` javascript
 // Imports
 const mongoosePaginate = require('mongoose-paginate');
 const mongoosePaginateHook = require('../index');
@@ -49,6 +42,3 @@ BookModel.paginate(
             size: 15,
         }
     });
-
-```
-
