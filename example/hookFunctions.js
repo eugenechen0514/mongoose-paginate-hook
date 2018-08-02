@@ -7,6 +7,8 @@ function afterPaginationFunction(result) {
     // Change 'docs' key to 'data' key
     result.data = result.docs;
     delete result.docs;
+
+    result.pageIndex = result - 1; // to change zero-base
     return result;
 }
 
@@ -17,7 +19,7 @@ function afterPaginationFunction(result) {
  * @return {*}
  */
 function beforePaginationFunction(paginateFunction, query = {}, paginationOptions) {
-    const pageIndex = Number(paginationOptions.page.number) + 1;
+    const pageIndex = Number(paginationOptions.page.number) + 1; // change to zero-base
     const pageSize =  Number(paginationOptions.page.size);
 
     return paginateFunction(query, {page: pageIndex, limit: pageSize}); // should return paginateFunction(...)
