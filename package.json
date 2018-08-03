@@ -1,7 +1,7 @@
 {
   "name": "mongoose-paginate-hook",
-  "version": "0.0.2",
-  "description": "hook functions for paginate method in order to chaning output or input",
+  "version": "0.0.3",
+  "description": "hook functions for a pagination method in order to modify output or input",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,22 +1,39 @@
 # Mongoose paginate hook
 
-Provide hook-functions to modify output and input for pagination method
+Provide a schema plugin that can hook some functions to modify output and input for pagination method
 
-# API
+# Usage
+
+``` javascript
+const mongoosePaginate = require('mongoose-paginate');
 const mongoosePaginateHook = require('mongoose-paginate-hook');
 
-`mongoosePaginateHook(options)` where options has following properties:
-* ***paginateFunctionName*** : pagination method
-* ***afterPaginationFunction*** : alter result. It is useful to change key name.
-* ***beforePaginationFunction*** : alter pagination input. It is useful to change the original pagination function signature. `NOTE: should return paginateFunction(...)`
+// Define book schema and use plugins
+const BookSchema = new Schema({
+    name: {type: String, required: true},
+});
+BookSchema.plugin(mongoosePaginate); // add paginate method
+BookSchema.plugin(mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunction})); // hook functions
+```
+# API
+import by `const mongoosePaginateHook = require('mongoose-paginate-hook');`
 
+`mongoosePaginateHook(options)` where `options` has following properties:
+
+
+
+| option  | type  | description  |
+|-----|---|---|
+| ***paginateFunctionName***      | `string`                                                               | pagination method name |
+| ***afterPaginationFunction***   | `function(result: object): object`                                     | alter result. It is useful to change key name |
+| ***beforePaginationFunction***  | `function(paginateFunction: function, [query], [options], [callback])` | alter pagination input. It is useful to change the original pagination function signature. ***paginateFunction*** is the original pagination method. **NOTE: you should `return paginateFunction(...)`**  |
 
 # Example
 
 ``` javascript
 // Imports
 const mongoosePaginate = require('mongoose-paginate');
-const mongoosePaginateHook = require('../index');
+const mongoosePaginateHook = require('mongoose-paginate-hook');
 
 // Hook functions
 function afterPaginationFunction(result) {
@@ -29,6 +46,8 @@ function afterPaginationFunction(result) {
 }
 
 /**
+ *
+ * new pagination method signature
  * @param query
  * @param paginateFunction
  * @param {{page: {number, size}}} paginationOptions
@@ -41,7 +60,7 @@ function beforePaginationFunction(paginateFunction, query = {}, paginationOption
     return paginateFunction(query, {page: pageIndex, limit: pageSize}); // should return paginateFunction(...)
 }
 
-// Define book schema and use plugin
+// Define book schema and use plugins
 const BookSchema = new Schema({
     name: {type: String, required: true},
 });
@@ -51,7 +70,7 @@ BookSchema.plugin(mongoosePaginateHook({ beforePaginationFunction, afterPaginati
 // Model
 const BookModel = mongoose.model('Book', BookSchema);
 
-// Use paginate
+// Use the pagination method
 BookModel.paginate(
     {},
     {
