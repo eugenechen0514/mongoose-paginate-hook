@@ -6,6 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [
+    "mongoose",
+    "pagination"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eugenechen0514/mongoose-paginate-hook.git"
