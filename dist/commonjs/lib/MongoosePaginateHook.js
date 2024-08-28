@@ -1,13 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mongoosePaginateHook = mongoosePaginateHook;
+require("mongoose-paginate");
 /**
  *
  * new pagination method signature
- * @param {function(paginateFunction: function, [query], [options], [callback])} beforePaginationFunction
- * @param {function(result: object):object} afterPaginationFunction
- * @param {string} paginateFunctionName
- * @return {function()}
  */
 function mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunction, paginateFunctionName = 'paginate' }) {
     return function hookPlugin(schema, options) {
@@ -15,29 +12,29 @@ function mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunctio
         if (paginateFunction && typeof paginateFunction === 'function') {
             if (afterPaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] = function (query, options, callback) {
+                schema.statics[paginateFunctionName] = function (query, paginateOptions, callback) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
                     if (typeof callback === 'function') {
-                        _paginateFunction(query, options, (err, result) => {
+                        _paginateFunction(query, paginateOptions, (err, result) => {
                             if (err) {
                                 callback(err);
                             }
                             else {
-                                callback(err, afterPaginationFunction(result));
+                                callback(err, afterPaginationFunction(result, paginateOptions));
                             }
                         });
                     }
                     else {
-                        return _paginateFunction(query, options)
+                        return _paginateFunction(query, paginateOptions)
                             .then(afterPaginationFunction);
                     }
                 };
             }
             if (beforePaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] = function (query, options, callback) {
+                schema.statics[paginateFunctionName] = function (query, paginateOptions, callback) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
-                    return beforePaginationFunction(_paginateFunction, query, options, callback);
+                    return beforePaginationFunction(_paginateFunction, query, paginateOptions, callback);
                 };
             }
         }
