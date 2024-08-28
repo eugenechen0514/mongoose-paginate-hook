@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mongoosePaginateHook = mongoosePaginateHook;
 /**
  *
  * new pagination method signature
@@ -6,39 +9,40 @@
  * @param {string} paginateFunctionName
  * @return {function()}
  */
-function mongoosePaginateHook({beforePaginationFunction, afterPaginationFunction, paginateFunctionName = 'paginate'}) {
-    return function hookPlugin (schema, options) {
+function mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunction, paginateFunctionName = 'paginate' }) {
+    return function hookPlugin(schema, options) {
         const paginateFunction = schema.statics[paginateFunctionName];
-        if(paginateFunction && typeof paginateFunction === 'function') {
-            if(afterPaginationFunction) {
+        if (paginateFunction && typeof paginateFunction === 'function') {
+            if (afterPaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] = function(query, options, callback) {
+                schema.statics[paginateFunctionName] = function (query, options, callback) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
-                    if(typeof callback === 'function') {
+                    if (typeof callback === 'function') {
                         _paginateFunction(query, options, (err, result) => {
-                            if(err) {
+                            if (err) {
                                 callback(err);
-                            } else {
+                            }
+                            else {
                                 callback(err, afterPaginationFunction(result));
                             }
-                        })
-                    } else {
-                        return _paginateFunction(query, options)
-                            .then(afterPaginationFunction)
+                        });
                     }
-                }
+                    else {
+                        return _paginateFunction(query, options)
+                            .then(afterPaginationFunction);
+                    }
+                };
             }
-
-            if(beforePaginationFunction) {
+            if (beforePaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] =  function(query, options, callback) {
+                schema.statics[paginateFunctionName] = function (query, options, callback) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
                     return beforePaginationFunction(_paginateFunction, query, options, callback);
-                }
+                };
             }
-        } else {
+        }
+        else {
             throw new Error('Can not find pagination function');
         }
     };
 }
-module.exports = exports = mongoosePaginateHook;
