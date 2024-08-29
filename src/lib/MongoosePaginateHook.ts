@@ -1,5 +1,5 @@
 import 'mongoose-paginate'
-import {PaginateModel, Document, PaginateResult, Schema, PaginateOptions} from 'mongoose';
+import {PaginateModel, Document, PaginateResult, Schema, PaginateOptions, Model} from 'mongoose';
 
 export type AfterPaginationHookResult = any;
 export type PaginateCallback<T extends Document> = (err: Error | undefined | null, result?: PaginateResult<T> | AfterPaginationHookResult) => void
@@ -17,19 +17,19 @@ export interface PaginateHookOptions<T extends Document> {
  *
  * new pagination method signature
  */
-export function mongoosePaginateHook<T extends Document>({
+export function mongoosePaginateHook<DocType extends Document, SchemaDefinitionType = undefined>({
                                          beforePaginationFunction,
                                          afterPaginationFunction,
-                                         paginateFunctionName = 'paginate'}: PaginateHookOptions<T>) {
-    return function hookPlugin (schema: Schema, options?: any) {
+                                         paginateFunctionName = 'paginate'}: PaginateHookOptions<DocType>) {
+    return function hookPlugin (schema : Schema<DocType, Model<DocType>, SchemaDefinitionType>, options?: any) {
         const paginateFunction = schema.statics[paginateFunctionName];
         if(paginateFunction && typeof paginateFunction === 'function') {
             if(afterPaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] = function(query: object, paginateOptions: PaginateOptions, callback?: PaginateCallback<T>) {
+                schema.statics[paginateFunctionName] = function(query: object, paginateOptions: PaginateOptions, callback?: PaginateCallback<DocType>) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
                     if(typeof callback === 'function') {
-                        _paginateFunction(query, paginateOptions, (err: Error | undefined | null, result?: PaginateResult<T>) => {
+                        _paginateFunction(query, paginateOptions, (err: Error | undefined | null, result?: PaginateResult<DocType>) => {
                             if(err) {
                                 callback(err);
                             } else {
@@ -50,7 +50,7 @@ export function mongoosePaginateHook<T extends Document>({
 
             if(beforePaginationFunction) {
                 const orgPaginateFunction = schema.statics[paginateFunctionName];
-                schema.statics[paginateFunctionName] =  function(query: object, paginateOptions: PaginateOptions, callback?: PaginateCallback<T>) {
+                schema.statics[paginateFunctionName] =  function(query: object, paginateOptions: PaginateOptions, callback?: PaginateCallback<DocType>) {
                     const _paginateFunction = orgPaginateFunction.bind(this);
                     return beforePaginationFunction(_paginateFunction, query, paginateOptions, callback);
                 }
