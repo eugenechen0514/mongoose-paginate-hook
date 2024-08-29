@@ -20,7 +20,13 @@ function mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunctio
                                 callback(err);
                             }
                             else {
-                                callback(err, afterPaginationFunction(result, paginateOptions));
+                                // no error
+                                if (!result) {
+                                    callback(new Error('no error but result is empty, mongoose-paginate may have bugs'));
+                                }
+                                else {
+                                    callback(err, afterPaginationFunction(result, paginateOptions));
+                                }
                             }
                         });
                     }
