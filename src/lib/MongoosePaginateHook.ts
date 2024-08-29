@@ -1,11 +1,11 @@
 import 'mongoose-paginate'
-import {PaginateModel, Document, PaginateResult, Schema, PaginateOptions, QueryPopulateOptions} from 'mongoose';
+import {PaginateModel, Document, PaginateResult, Schema, PaginateOptions} from 'mongoose';
 
 export type AfterPaginationHookResult = any;
 export type PaginateCallback<T extends Document> = (err: Error | undefined | null, result?: PaginateResult<T> | AfterPaginationHookResult) => void
 export type SchemaStaticFunction<T extends Document> = PaginateModel<T>['paginate'];
 export type BeforePaginationFunctionHook<T extends Document> = (paginateFunction: SchemaStaticFunction<T>, query: object, paginateOptions: PaginateOptions, callback?: PaginateCallback<T>) => Promise<PaginateResult<T>>;
-export type AfterPaginationFunctionHook<T extends Document> = (result?: PaginateResult<T>, paginateOptions?: PaginateOptions) => AfterPaginationHookResult;
+export type AfterPaginationFunctionHook<T extends Document> = (result: PaginateResult<T>, paginateOptions?: PaginateOptions) => AfterPaginationHookResult;
 
 export interface PaginateHookOptions<T extends Document> {
     beforePaginationFunction?: BeforePaginationFunctionHook<T>;
@@ -33,7 +33,12 @@ export function mongoosePaginateHook<T extends Document>({
                             if(err) {
                                 callback(err);
                             } else {
-                                callback(err, afterPaginationFunction(result, paginateOptions));
+                                // no error
+                                if(!result) {
+                                    callback(new Error('no error but result is empty, mongoose-paginate may have bugs'));
+                                } else {
+                                    callback(err, afterPaginationFunction(result, paginateOptions));
+                                }
                             }
                         })
                     } else {
