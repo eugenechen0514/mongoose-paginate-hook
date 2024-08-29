@@ -1,5 +1,7 @@
 # Mongoose paginate hook
 
+IMPORTANT: [mongoose-paginate-v2](https://www.npmjs.com/package/mongoose-paginate-v2) is a recommended alternative to mongoose-paginate and mongoose-paginate-hook, both of which are outdated.  
+
 Provide a schema plugin that can hook some functions to modify output and input for pagination method
 
 # Usage
