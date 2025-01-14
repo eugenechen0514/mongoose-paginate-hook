@@ -1,2 +1,3 @@
 import { mongoosePaginateHook } from './lib/MongoosePaginateHook';
-export = mongoosePaginateHook;
+export * from './lib/MongoosePaginateHook';
+export default mongoosePaginateHook;
