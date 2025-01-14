@@ -4,17 +4,6 @@ IMPORTANT: [mongoose-paginate-v2](https://www.npmjs.com/package/mongoose-paginat
 
 Provide a schema plugin that can hook some functions to modify output and input for pagination method
 
-# Dependency
-* 2.0.0
-    ```
-    mongoose: 8.X.X
-    ```
-* 0.1.7
-    ```
-    mongoose: 5.X.X
-    ```
-
-
 # Usage
 
 ``` javascript
