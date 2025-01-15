@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mongoosePaginateHook = mongoosePaginateHook;
-require("mongoose-paginate");
+require("mongoose-paginate-v2");
 /**
  *
  * new pagination method signature
@@ -32,7 +32,9 @@ function mongoosePaginateHook({ beforePaginationFunction, afterPaginationFunctio
                     }
                     else {
                         return _paginateFunction(query, paginateOptions)
-                            .then(afterPaginationFunction);
+                            .then(result => {
+                            return afterPaginationFunction(result, paginateOptions);
+                        });
                     }
                 };
             }

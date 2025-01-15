@@ -4,6 +4,15 @@ IMPORTANT: [mongoose-paginate-v2](https://www.npmjs.com/package/mongoose-paginat
 
 Provide a schema plugin that can hook some functions to modify output and input for pagination method
 
+# Requirement
+
+
+| version | pagination plugin                                                          |
+| ------- | -------------------------------------------------------------------------- |
+| 3.0.0   | [mongoose-paginate-v2](https://www.npmjs.com/package/mongoose-paginate-v2) |
+| 2.0.4   | [mongoose-paginate](https://www.npmjs.com/package/mongoose-paginate)       |
+
+
 # Usage
 
 ``` javascript
@@ -24,11 +33,11 @@ import by `const mongoosePaginateHook = require('mongoose-paginate-hook');`
 
 
 
-| option  | type  | description  |
-|-----|---|---|
-| ***paginateFunctionName***      | `string`                                                               | pagination method name |
-| ***afterPaginationFunction***   | `function(result: object): object`                                     | alter result. It is useful to change key name |
-| ***beforePaginationFunction***  | `function(paginateFunction: function, [query], [options], [callback])` | alter pagination input. It is useful to change the original pagination function signature. ***paginateFunction*** is the original pagination method. **NOTE: you should `return paginateFunction(...)`**  |
+| option                         | type                                                                   | description                                                                                                                                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ***paginateFunctionName***     | `string`                                                               | pagination method name                                                                                                                                                                                   |
+| ***afterPaginationFunction***  | `function(result: object): object`                                     | alter result. It is useful to change key name                                                                                                                                                            |
+| ***beforePaginationFunction*** | `function(paginateFunction: function, [query], [options], [callback])` | alter pagination input. It is useful to change the original pagination function signature. ***paginateFunction*** is the original pagination method. **NOTE: you should `return paginateFunction(...)`** |
 
 # Example
 
