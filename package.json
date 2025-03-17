@@ -1,6 +1,6 @@
 {
   "name": "mongoose-paginate-hook",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "hook functions for a pagination method in order to modify output or input",
   "main": "dist/commonjs/index.js",
   "types": "dist/commonjs/index.d.js",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/eugenechen0514/mongoose-paginate-hook#readme",
   "devDependencies": {
-    "mongoose": "^8.9.5",
+    "mongoose": "^8.12.1",
     "mongoose-paginate-v2": "^1.9.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   }
 }
